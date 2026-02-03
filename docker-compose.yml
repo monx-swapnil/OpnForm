@@ -7,8 +7,12 @@ services:
       - opnform_storage:/usr/share/nginx/html/storage:rw
     environment: &api-env
       APP_ENV: production
+      APP_KEY: base64:DUw4jBlPhw2OlKmQrctRlwYtCi0EX/gELyycjGkchFw=
+      API_SECRET: ${API_SECRET}
+      JWT_SECRET: ${JWT_SECRET}
       # Database settings
       DB_HOST: db
+      DB_PORT: 5432
       REDIS_HOST: redis
       DB_DATABASE: ${DB_DATABASE:-forge}
       DB_USERNAME: ${DB_USERNAME:-forge}
@@ -70,7 +74,7 @@ services:
     image: jhumanj/opnform-client:latest
     container_name: opnform-client
     env_file:
-      - ./client/.env
+      - ./client/.env.docker
     depends_on:
       api:
         condition: service_healthy
