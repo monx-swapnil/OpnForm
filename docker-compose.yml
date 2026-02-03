@@ -71,13 +71,17 @@ services:
       start_period: 70s # Allow time for first scheduled run and cache write
 
   ui:
-    image: jhumanj/opnform-client:latest
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.client
     container_name: opnform-client
     env_file:
       - ./client/.env.docker
     depends_on:
       api:
         condition: service_healthy
+    ports:
+      - "3000:3000"
     healthcheck:
       test:
         ["CMD-SHELL", "wget --spider -q http://localhost:3000/login || exit 1"]
