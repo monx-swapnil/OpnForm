@@ -41,26 +41,6 @@
       />
       </VTransition>  
 
-      <!-- Remember Me & Forgot Password - only show when password field is visible -->
-      <div v-if="showPasswordField" class="relative flex items-center mt-1.5">
-        <CheckboxInput
-          class="w-full md:w-1/2"
-          name="remember"
-          size="small"
-          label="Remember me"
-        />
-
-        <div class="w-full md:w-1/2 text-right">
-          <a
-            href="#"
-            class="text-xs hover:underline text-neutral-500 sm:text-sm hover:text-neutral-700"
-            @click.prevent="showForgotModal = true"
-          >
-            Forgot your password?
-          </a>
-        </div>
-      </div>
-
       <!-- Submit Button -->
       <UButton
         class="mt-2"
@@ -71,39 +51,6 @@
         :label="oidcAvailable && !showPasswordField ? 'Continue' : 'Log in to continue'"
       />
 
-      <UButton
-        v-if="useFeatureFlag('services.google.auth') && !useFeatureFlag('self_hosted')"
-        native-type="button"
-        color="neutral"
-        variant="outline"
-        size="lg"
-        class="space-x-4 mt-4 flex items-center"
-        block
-        :disabled="form.busy"
-        :loading="false"
-        @click.prevent="signInwithGoogle"
-        icon="devicon:google"
-        label="Sign in with Google"
-      />
-      <p
-        v-if="!useFeatureFlag('self_hosted')"
-        class="text-neutral-500 text-sm text-center mt-4"
-      >
-        Don't have an account?
-        <a
-          v-if="isQuick"
-          href="#"
-          class="font-semibold ml-1"
-          @click.prevent="$emit('openRegister')"
-        >Sign Up</a>
-        <NuxtLink
-          v-else
-          :to="{ name: 'register' }"
-          class="font-semibold ml-1"
-        >
-          Sign Up
-        </NuxtLink>
-      </p>
     </v-form>
 
     <!-- Google One Tap -->
