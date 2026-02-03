@@ -211,13 +211,18 @@ const helpUrl = computed(() => opnformConfig.links.help_url)
 const hasNavbar = computed(() => {
   if (isIframe.value) return false
 
-  if (route.name && route.name === 'forms-slug') {
+  // Hide navbar on auth-related pages
+  if (['login', 'register', 'setup'].includes(route.name)) {
+    return false
+  }
+
+  if (route.name === 'forms-slug') {
     if (form.value || import.meta.server) {
       return false
     }
-    // Form not found/404 case - show the navbar
     return true
   }
+
   return true
 })
 
