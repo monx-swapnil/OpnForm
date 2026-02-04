@@ -95,7 +95,6 @@ function isActiveRoute(prefix) {
 
 // Navigation sections structure
 const navigationSections = computed(() => [
-  // Section 1: Main navigation (no name)
   {
     name: null,
     items: [
@@ -119,23 +118,9 @@ const navigationSections = computed(() => [
         icon: 'i-heroicons-document-duplicate',
         to: { name: 'templates-my-templates' },
         active: isActiveRoute('templates')
-      }),
-      // Show upgrade for non-pro users
-      ...(workspace.value && !workspace.value.is_pro && !isSelfHosted.value ? [createNavItem({
-        label: 'Upgrade to Pro',
-        icon: 'i-heroicons-sparkles-solid', 
-        onClick: () => {
-          useAmplitude().logEvent('app_sidebar_upgrade_click')
-          openSubscriptionModal({
-            modal_title: 'Upgrade to Pro plan',
-          })
-        },
-        color: 'primary' // Override default color
-      })] : [])
+      })
     ]
-  },
-  // Add shared navigation sections (Product and Help)
-  ...sharedNavigationSections.value
+  }
 ])
 
 function handleItemClick(_item) {

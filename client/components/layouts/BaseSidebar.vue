@@ -62,18 +62,6 @@
       <slot name="navigation" :isMobileMenuOpen="isMobileMenuOpen" />
     </nav>
 
-    <!-- Footer -->
-    <div 
-      class="p-2 border-t border-neutral-200"
-      :class="{ 'hidden': !isMobileMenuOpen, 'sm:block': true }"
-    >
-      <slot name="footer" :isMobileMenuOpen="isMobileMenuOpen">
-        <p class="text-xs text-neutral-400 text-center">
-          <span class="font-bold"><NuxtLink class="text-neutral-400" :to="{ name: 'home' }">OpnForm</NuxtLink></span>
-          <span class="text-neutral-500" v-if="version"> v{{ version }}</span>
-        </p>
-      </slot>
-    </div>
   </aside>
 </template>
 
