@@ -133,12 +133,16 @@ const formNavigationItems = computed(() => [
 
 // Navigation sections structure
 const navigationSections = computed(() => [
-  // Section 1: Form navigation (no name)
   {
     name: null,
     items: formNavigationItems.value
   },
-  // Add shared navigation sections (Product and Help)
-  ...sharedNavigationSections.value
+  ...sharedNavigationSections.value.map(section => ({
+    ...section,
+    items: section.items.filter(
+      item => !['SEO & Social Sharing', 'Custom Code'].includes(item.label)
+    )
+  }))
 ])
+
 </script> 

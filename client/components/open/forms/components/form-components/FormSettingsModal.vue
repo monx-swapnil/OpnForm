@@ -27,23 +27,6 @@
     >
       <FormSecurityAccess />
     </SettingsModalPage>
-
-    <SettingsModalPage
-      id="seo"
-      label="SEO & Social Sharing"
-      icon="i-heroicons-link"
-    >
-      <FormCustomSeo />
-    </SettingsModalPage>
-
-    <SettingsModalPage
-      id="custom-code"
-      label="Custom Code"
-      icon="i-heroicons-code-bracket"
-    >
-      <FormCustomCode />
-    </SettingsModalPage>
-
   </SettingsModal>
 </template>
 

@@ -43,8 +43,9 @@ class FeatureFlagsController extends Controller
                     'telegram' => !empty(config('services.telegram.bot_token')),
                 ],
                 'custom_code' => [
-                    'enable_self_hosted' => (bool) config('opnform.custom_code.enable_self_hosted', false),
+                    'enable_self_hosted' => false,
                 ],
+                'seo' => false,
                 'oidc' => [
                     'available' => $this->isOidcAvailable(),
                     'forced' => config('oidc.force_login', false) && $this->isOidcAvailable(),
