@@ -7,9 +7,17 @@ services:
       - opnform_storage:/usr/share/nginx/html/storage:rw
     environment: &api-env
       APP_ENV: production
+      APP_DEBUG: "false"
       APP_KEY: base64:DUw4jBlPhw2OlKmQrctRlwYtCi0EX/gELyycjGkchFw=
+      APP_URL: http://localhost
+      FRONTEND_URL: http://localhost
       API_SECRET: ${API_SECRET}
       JWT_SECRET: ${JWT_SECRET}
+
+      MAIL_MAILER: log
+      MAIL_FROM_ADDRESS: no-reply@localhost
+      MAIL_FROM_NAME: OpnForm
+
       # Database settings
       DB_HOST: db
       DB_PORT: 5432
