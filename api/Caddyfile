@@ -1,0 +1,9 @@
+{
+    auto_https off
+}
+
+:{$PORT} {
+    root * /app/public
+    php_fastcgi unix//run/php/php-fpm.sock
+    file_server
+}
