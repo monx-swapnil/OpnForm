@@ -42,13 +42,6 @@ use App\Http\Controllers\HealthCheckController;
 |
 */
 
-Route::get('/debug-env', function () {
-    return response()->json([
-        'app_url' => config('app.url'),
-        'env_app_url' => env('APP_URL'),
-    ]);
-});
-
 Route::get('/healthcheck', [HealthCheckController::class, 'apiCheck']);
 
 Route::group(['middleware' => 'auth.multi'], function () {
