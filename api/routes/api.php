@@ -42,9 +42,7 @@ use App\Http\Controllers\HealthCheckController;
 |
 */
 
-if (config('app.self_hosted')) {
-    Route::get('/healthcheck', [HealthCheckController::class, 'apiCheck']);
-}
+Route::get('/healthcheck', [HealthCheckController::class, 'apiCheck']);
 
 Route::group(['middleware' => 'auth.multi'], function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
