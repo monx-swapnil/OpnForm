@@ -313,8 +313,7 @@ import TrackClick from "~/components/global/TrackClick.vue"
 import { useIsAuthenticated } from '~/composables/useAuthFlow'
 
 definePageMeta({
-  layout: "default",
-  middleware: ['root-redirect']
+  layout: "default"
 })
 
 const { isAuthenticated: authenticated } = useIsAuthenticated()
@@ -333,7 +332,7 @@ const configLinks = computed(() => config.links)
   color: #2563eb;
 }
 
-@screen md {
+@media (min-width: 768px) {
   #macbook-video {
     position: absolute;
     max-width: 84.8% !important;

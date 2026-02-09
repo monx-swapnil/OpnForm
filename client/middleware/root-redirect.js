@@ -1,7 +1,9 @@
 export default defineNuxtRouteMiddleware(async () => {
-  const { performRedirect } = useSubdomainRedirect()
-  
-  // Perform redirect with iframe check disabled for root pages
-  // (root pages should always redirect regardless of iframe context)
-  await performRedirect({ skipIfIframe: false })
-}) 
+  const route = useRoute()
+
+  // Only apply subdomain redirect AFTER login
+  // Never auto-redirect on root entry
+  if (route.path !== '/') return
+
+  return navigateTo('/login')
+})
