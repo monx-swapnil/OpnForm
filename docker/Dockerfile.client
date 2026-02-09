@@ -1,46 +1,32 @@
-FROM node:24-alpine AS javascript-builder
+# ---------- Build stage ----------
+FROM node:20-alpine AS builder
 WORKDIR /app
 
-# It's best to add as few files as possible before running the build commands
-# as they will be re-run everytime one of those files changes.
-#
-# It's possible to run npm install with only the package.json and package-lock.json file.
+COPY client/package.json client/package-lock.json ./
 
-ADD ./client/package.json ./client/package-lock.json ./
+RUN apk add --no-cache git \
+    && npm ci \
+    && npm cache clean --force
 
-# Install git and other necessary build tools
-RUN apk add --no-cache git
+COPY client/ .
 
-# Clear npm cache, remove existing node_modules, and install dependencies
-RUN npm cache clean --force && \
-    rm -rf node_modules && \
-    npm ci
-
-# Clean up after npm install to free memory
-RUN npm cache clean --force
-
-# Explicitly install the correct version of esbuild
-# RUN npm install esbuild@0.21.5
-
-ADD ./client/ /app/
-
-ENV NODE_OPTIONS="--max-old-space-size=6144"
-# Set production mode to reduce memory usage
 ENV NODE_ENV=production
-# Disable source maps to reduce memory usage
-ENV GENERATE_SOURCEMAP=false
-# Additional memory optimizations
 ENV NUXT_TELEMETRY_DISABLED=1
-# Optimize Vite build for memory
-ENV VITE_NODE_OPTIONS="--max-old-space-size=10240"
-# Run the build with additional memory optimizations and limited concurrency
+ENV GENERATE_SOURCEMAP=false
+
 RUN NODE_OPTIONS="--max-old-space-size=10240" \
     NUXT_BUILD_CONCURRENCY=1 \
     npm run build
 
-FROM node:24-alpine
-WORKDIR /app
-COPY --from=javascript-builder /app/.output/ /app/
-RUN ls /app/
 
-CMD [ "node", "./server/index.mjs" ]
+# ---------- Runtime stage ----------
+FROM node:20-alpine
+WORKDIR /app
+
+ENV NODE_ENV=production
+
+COPY --from=builder /app/.output ./
+
+EXPOSE 3000
+
+CMD ["node", "server/index.mjs"]
