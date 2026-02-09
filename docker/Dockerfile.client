@@ -34,8 +34,7 @@ ENV NUXT_TELEMETRY_DISABLED=1
 # Optimize Vite build for memory
 ENV VITE_NODE_OPTIONS="--max-old-space-size=10240"
 # Run the build with additional memory optimizations and limited concurrency
-RUN --mount=type=tmpfs,target=/tmp \
-    NODE_OPTIONS="--max-old-space-size=10240" \
+RUN NODE_OPTIONS="--max-old-space-size=10240" \
     NUXT_BUILD_CONCURRENCY=1 \
     npm run build
 
