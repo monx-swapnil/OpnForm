@@ -1,36 +1,45 @@
-# Build stage - using PHP CLI image with extensions
+# =========================
+# Build stage
+# =========================
 FROM php:8.3-cli AS builder
 
-# Install composer and extensions needed for dependency installation
+# Install system dependencies and PHP extensions for build
 RUN apt-get update && apt-get install -y \
     libzip-dev \
     libpng-dev \
     unzip \
     git \
+    curl \
     && docker-php-ext-install -j$(nproc) \
-    bcmath \
-    gd \
-    zip \
-    && curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+        bcmath \
+        gd \
+        zip \
+    && curl -sS https://getcomposer.org/installer | php -- \
+        --install-dir=/usr/local/bin \
+        --filename=composer
 
 WORKDIR /app
 
-# Copy the entire source code for proper installation
+# Copy API source
 COPY api/ .
 
-# Install dependencies including dev dependencies
-RUN composer install --optimize-autoloader --no-interaction \
+# Install PHP dependencies
+RUN composer install \
+    --optimize-autoloader \
+    --no-interaction \
     --ignore-platform-req=php \
     --ignore-platform-req=ext-bcmath \
     --ignore-platform-req=ext-gd
 
-# Final stage - smaller runtime image
+
+# =========================
+# Runtime stage
+# =========================
 FROM php:8.3-fpm-alpine
 
-# Accept version build argument
 ARG APP_VERSION=unknown
 
-# Install runtime dependencies
+# Runtime dependencies
 RUN apk add --no-cache \
     libzip \
     libpng \
@@ -39,10 +48,9 @@ RUN apk add --no-cache \
     procps \
     unzip \
     bash \
-    icu-libs \
-    && rm -rf /var/cache/apk/*
+    icu-libs
 
-# Install build dependencies and PHP extensions
+# Build dependencies for PHP extensions
 RUN apk add --no-cache --virtual .build-deps \
     $PHPIZE_DEPS \
     libzip-dev \
@@ -53,37 +61,42 @@ RUN apk add --no-cache --virtual .build-deps \
     && docker-php-ext-configure pgsql \
     && docker-php-ext-configure gd \
     && docker-php-ext-install -j$(nproc) \
-    pdo \
-    zip \
-    gd \
-    pgsql \
-    pdo_pgsql \
-    bcmath \
+        pdo \
+        zip \
+        gd \
+        pgsql \
+        pdo_pgsql \
+        bcmath \
     && pecl install redis \
     && docker-php-ext-enable redis \
     && apk del .build-deps
 
-WORKDIR /usr/share/nginx/html/
+WORKDIR /usr/share/nginx/html
 
-# Create storage directories
-RUN mkdir -p storage/framework/sessions \
-    storage/framework/views \
-    storage/framework/cache \
-    storage/logs \
-    storage/app/public \
-    bootstrap/cache \
+# =========================
+# COPY APPLICATION (IMPORTANT)
+# =========================
+COPY --from=builder /app/ ./
+
+# =========================
+# FIX STORAGE PERMISSIONS (CRITICAL)
+# =========================
+RUN mkdir -p \
+        storage/framework/sessions \
+        storage/framework/views \
+        storage/framework/cache \
+        storage/logs \
+        storage/app/public \
+        bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache
 
-# Copy the entire application from the builder stage
-COPY --from=builder /app/ ./
-
-# Set version as environment variable
+# Version env
 ENV APP_VERSION_DOCKER=$APP_VERSION
 
-# Setup entrypoint
+# Entrypoint
 COPY docker/php-fpm-entrypoint /usr/local/bin/opnform-entrypoint
-RUN chmod a+x /usr/local/bin/*
+RUN chmod +x /usr/local/bin/opnform-entrypoint
 
 ENTRYPOINT ["/usr/local/bin/opnform-entrypoint"]
 CMD ["php-fpm"]
