@@ -2,8 +2,7 @@
 import LoginForm from "~/components/pages/auth/components/LoginForm.vue"
 
 definePageMeta({
-  layout: false,
-  middleware: "guest",
+  layout: false
 })
 
 useOpnSeoMeta({
