@@ -18,6 +18,8 @@ use App\Service\Storage\FileUploadPathService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class FormController extends Controller
 {
@@ -100,19 +102,22 @@ class FormController extends Controller
     }
 
     public function store(StoreFormRequest $request)
-    {
-        $workspace = Workspace::findOrFail($request->get('workspace_id'));
-        $this->authorize('ownsWorkspace', $workspace);
-        $this->authorize('create', [Form::class, $workspace]);
+{
+    $workspace = Workspace::findOrFail($request->get('workspace_id'));
+    $this->authorize('ownsWorkspace', $workspace);
+    $this->authorize('create', [Form::class, $workspace]);
 
+    try {
         $formData = $this->formCleaner
             ->processRequest($request)
             ->simulateCleaning($workspace)
             ->getData();
 
-        $form = Form::create(array_merge($formData, [
-            'creator_id' => $request->user()->id,
-        ]));
+        $form = DB::transaction(function () use ($formData, $request) {
+            return Form::create(array_merge($formData, [
+                'creator_id' => $request->user()->id,
+            ]));
+        });
 
         if (config('app.self_hosted') && !empty($formData['slug'])) {
             $form->slug = $formData['slug'];
@@ -121,17 +126,36 @@ class FormController extends Controller
 
         if ($this->formCleaner->hasCleaned()) {
             $formStatus = $form->workspace->is_trialing ? 'Non-trial' : 'Pro';
-            $message =  'Form successfully created, but the ' . $formStatus . ' features you used will be disabled when sharing your form:';
+            $message = 'Form successfully created, but the ' . $formStatus . ' features you used will be disabled when sharing your form:';
         } else {
-            $message =  'Form created.';
+            $message = 'Form created.';
         }
 
-        return $this->success([
-            'message' => $message . ($form->visibility == 'draft' ? ' But other people won\'t be able to see the form since it\'s currently in draft mode' : ''),
-            'form' => (new FormResource($form))->setCleanings($this->formCleaner->getPerformedCleanings()),
-            'users_first_form' => $request->user()->forms()->count() == 1,
+        return response()->json([
+            'success' => true,
+            'message' => $message . ($form->visibility === 'draft'
+                ? ' But other people won\'t be able to see the form since it\'s currently in draft mode'
+                : ''
+            ),
+            'form' => [
+                'id' => $form->id,
+                'slug' => $form->slug,
+                'title' => $form->title,
+                'visibility' => $form->visibility,
+            ],
+            'users_first_form' => $request->user()->forms()->count() === 1,
+        ], 201);
+
+    } catch (\Throwable $e) {
+        Log::error('Form creation failed AFTER DB commit', [
+            'error' => $e->getMessage(),
         ]);
+
+        return response()->json([
+            'message' => 'Failed to create form',
+        ], 500);
     }
+}
 
     public function update(UpdateFormRequest $request, Form $form)
     {
