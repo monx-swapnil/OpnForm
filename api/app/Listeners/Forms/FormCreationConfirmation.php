@@ -7,16 +7,15 @@ use App\Mail\Forms\FormCreationConfirmationMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Mail;
 
-class FormCreationConfirmation implements ShouldQueue
+class FormCreationConfirmation
 {
-    /**
-     * Handle the event.
-     *
-     * @param  object  $event
-     * @return void
-     */
     public function handle(FormCreated $event)
     {
-        Mail::to($event->form->creator)->send(new FormCreationConfirmationMail($event->form));
+        if (config('app.self_hosted')) {
+            return;
+        }
+
+        Mail::to($event->form->creator)
+            ->send(new FormCreationConfirmationMail($event->form));
     }
 }
