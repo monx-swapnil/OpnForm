@@ -2,7 +2,8 @@
 import LoginForm from "~/components/pages/auth/components/LoginForm.vue"
 
 definePageMeta({
-  layout: false
+  layout: false,
+  middleware: [] // explicitly public
 })
 
 useOpnSeoMeta({

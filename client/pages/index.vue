@@ -303,24 +303,10 @@
 </template>
 
 <script setup>
-import Features from "~/components/pages/welcome/Features.vue"
-import MoreFeatures from "../components/pages/welcome/MoreFeatures.vue"
-import PricingTable from "../components/pages/pricing/PricingTable.vue"
-import AiFeature from "../components/pages/welcome/AiFeature.vue"
-import TemplatesSlider from "../components/pages/welcome/TemplatesSlider.vue"
-import opnformConfig from "~/opnform.config.js"
-import TrackClick from "~/components/global/TrackClick.vue"
-import { useIsAuthenticated } from '~/composables/useAuthFlow'
-
-definePageMeta({
-  layout: "default"
-})
-
-const { isAuthenticated: authenticated } = useIsAuthenticated()
-
-const config = opnformConfig
-const configLinks = computed(() => config.links)
+navigateTo('/login')
 </script>
+
+<template></template>
 
 <style lang="scss" scoped>
 .customer-logo-container {
