@@ -11,13 +11,13 @@
             class="flex-shrink-0 font-semibold hover:no-underline flex items-center"
           >
             <img
-              src="/img/logo.svg"
-              alt="notion tools logo"
+              src="/images/logo.png"
+              alt="Equence"
               class="w-6 h-6"
             >
             <span
               class="ml-2 text-md hidden sm:inline text-black dark:text-white"
-            >OpnForm</span>
+            >Equence</span>
           </NuxtLink>
           <WorkspaceDropdown class="ml-6">
             <template #default="{ workspace }">
