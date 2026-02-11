@@ -15,11 +15,11 @@
           class="flex-shrink-0 font-semibold flex items-center"
         >
           <img
-            src="/img/logo.svg"
-            alt="notion tools logo"
+            src="/images/logo.png"
+            alt="Equence logo"
             class="w-10 h-10"
           >
-          <span class="ml-2 text-xl text-black dark:text-white"> OpnForm </span>
+          <span class="ml-2 text-xl text-black dark:text-white"> Equence </span>
         </router-link>
       </div>
       <div class="flex justify-center mt-5 md:mt-0">

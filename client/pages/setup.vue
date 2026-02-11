@@ -3,17 +3,17 @@
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
       <div class="flex justify-center items-center mb-6">
         <img
-          src="/img/logo.svg"
-          alt="OpnForm logo"
+          src="/images/logo.png"
+          alt="Equence logo"
           class="w-8 h-8"
         >
         <h1 class="ml-2 text-xl font-semibold text-black">
-          OpnForm
+          Equence
         </h1>
       </div>
       
       <p class="mt-2 text-center text-sm text-neutral-600">
-        Welcome to OpnForm! Let's get you set up. Create your admin account to start building beautiful forms.
+        Welcome to Equence! Let's get you set up. Create your admin account to start building beautiful forms.
       </p>
     </div>
 
@@ -46,8 +46,8 @@ if (!setupRequired || !selfHosted) {
 
 // SEO
 useOpnSeoMeta({
-  title: "Setup - OpnForm",
-  description: "Set up your OpnForm instance",
+  title: "Setup - Equence",
+  description: "Set up your Equence instance",
   robots: "noindex, nofollow"
 })
 
