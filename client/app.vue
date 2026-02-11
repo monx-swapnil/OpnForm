@@ -64,7 +64,12 @@ useHead({
     },
   ],
   link: [
-   {
+    {
+      rel: 'icon',
+      type: 'image/png',
+      href: '/favicon.png'
+    },
+    {
       rel: 'apple-touch-icon',
       type: 'image/png',
       href: '/favicon.png'
