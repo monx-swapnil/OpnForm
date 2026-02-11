@@ -40,9 +40,9 @@ const isPublicFormPage = computed(() => route.name === 'forms-slug')
 
 // SEO and head configuration
 useOpnSeoMeta({
-  title: "Free Form Builder with Unlimited Submissions",
+  title: "Equence – Smart Form Builder",
   description:
-    "Build beautiful, powerful forms for free with OpnForm. Unlimited submissions, rich features, and seamless integrations — fully open-source and easy to use.",
+    "Build powerful and elegant forms with Equence. Unlimited submissions, seamless integrations, and full customization.",
   ogImage: "/img/social-preview.jpg",
   robots: () => {
     return config.public.env === "production" ? null : "noindex, nofollow"
@@ -51,7 +51,7 @@ useOpnSeoMeta({
 
 useHead({
   titleTemplate: (titleChunk) => {
-    return titleChunk ? `${titleChunk} - OpnForm` : "OpnForm"
+    return titleChunk ? `${titleChunk} - Equence` : "Equence"
   },
   meta: [
     {
@@ -64,10 +64,10 @@ useHead({
     },
   ],
   link: [
-    {
+   {
       rel: 'apple-touch-icon',
       type: 'image/png',
-      href: '/favicon.ico'
+      href: '/favicon.png'
     }
   ],
   htmlAttrs: () => ({
