@@ -11,7 +11,7 @@
             class="flex-shrink-0 font-semibold hover:no-underline flex items-center"
           >
             <img
-              src="/images/logo.png"
+              src="/img/logo.png"
               alt="Equence"
               class="w-6 h-6"
             >

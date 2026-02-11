@@ -3,7 +3,7 @@
     <div class="sm:mx-auto sm:w-full sm:max-w-md">
       <div class="flex justify-center items-center mb-6">
         <img
-          src="/images/logo.png"
+          src="/img/logo.png"
           alt="Equence logo"
           class="w-8 h-8"
         >

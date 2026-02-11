@@ -15,7 +15,7 @@
           class="flex-shrink-0 font-semibold flex items-center"
         >
           <img
-            src="/images/logo.png"
+            src="/img/logo.png"
             alt="Equence logo"
             class="w-10 h-10"
           >
