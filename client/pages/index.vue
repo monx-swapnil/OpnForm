@@ -1,3 +1,3 @@
 <script setup>
-navigateTo('/login')
+navigateTo('/setup')
 </script>
