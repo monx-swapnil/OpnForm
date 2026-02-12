@@ -73,10 +73,9 @@ class RegisterController extends Controller
             'password' => [
                 'required',
                 'string',
-                'min:8', // Minimum password length
-                'regex:/[A-Za-z]/', // Include letters
-                'regex:/[0-9]/', // Include numbers
-                'regex:/[@$!%*#?&\-_+=.,:;<>^()[\]{}|~]/', // Include special characters (expanded set)
+                'min:8',
+                'regex:/[A-Za-z]/', // at least one letter
+                'regex:/[0-9]/',    // at least one number
                 'confirmed',
             ],
             'hear_about_us' => 'required|string',
@@ -135,12 +134,16 @@ class RegisterController extends Controller
 
     private function checkRegistrationAllowed(array $data)
     {
-        if (config('app.self_hosted') && !array_key_exists('invite_token', $data) && (app()->environment() !== 'testing')) {
-            // Allow registration during setup (when no users exist)
-            if (!\App\Models\User::max('id')) {
-                return; // Setup mode - allow registration
-            }
-            return response()->json(['message' => 'Registration is not allowed.'], 400)->throwResponse();
+        if (
+            config('app.self_hosted')
+            && !array_key_exists('invite_token', $data)
+            && feature('setup_required')
+            === false
+            && (app()->environment() !== 'testing')
+        ) {
+            return response()
+                ->json(['message' => 'Registration is not allowed.'], 400)
+                ->throwResponse();
         }
     }
 }
