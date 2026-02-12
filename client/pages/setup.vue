@@ -40,9 +40,9 @@ const setupRequired = useFeatureFlag('setup_required', false)
 const selfHosted = useFeatureFlag('self_hosted', false)
 
 // Show 404 if setup not required or not self-hosted
-if (!setupRequired || !selfHosted) {
-  throw createError({ statusCode: 404, statusMessage: 'Page Not Found' })
-}
+// if (!setupRequired || !selfHosted) {
+//   throw createError({ statusCode: 404, statusMessage: 'Page Not Found' })
+// }
 
 // SEO
 useOpnSeoMeta({
